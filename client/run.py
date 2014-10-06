@@ -6,11 +6,18 @@ from chat import ChatClient
 from PyQt4 import QtCore, QtGui
 from httpWidget import Ui_HttpWidget
 
+from time import gmtime,strftime
+
+import csv
+
 class httpWidget(QtGui.QWidget):
 	def __init__(self,parent=None):
 		super(httpWidget, self).__init__(parent)
 		self.ui = Ui_HttpWidget()
 		self.ui.setupUi(self)
+
+		self.fp = open("dataset.csv",'a')
+		self.writer = csv.writer(self.fp,delimiter=',')
 		#self.chatClient = ChatClient(username)
 		# set margins
 		l = self.layout()
@@ -34,21 +41,35 @@ class httpWidget(QtGui.QWidget):
 		QtCore.QObject.connect(self.ui.webView,QtCore.SIGNAL("urlChanged (const QUrl&)"), self.link_clicked)
 		QtCore.QObject.connect(self.ui.webView,QtCore.SIGNAL("loadProgress (int)"), self.load_progress)
 		QtCore.QObject.connect(self.ui.webView,QtCore.SIGNAL("titleChanged (const QString&)"), self.title_changed)
-		QtCore.QObject.connect(self.ui.webView,QtCore.SIGNAL("loadFinished(bool)"),self.test)
+		QtCore.QObject.connect(self.ui.webView,QtCore.SIGNAL("loadFinished(bool)"),self.urlExtract)
 		QtCore.QObject.connect(self.ui.reload,QtCore.SIGNAL("clicked()"), self.reload_page)
 		QtCore.QObject.connect(self.ui.stop,QtCore.SIGNAL("clicked()"), self.stop_page)
-		QtCore.QObject.connect(self.ui.chat,QtCore.SIGNAL("clicked()"), self.chatClicked)
+		#QtCore.QObject.connect(self.ui.chat,QtCore.SIGNAL("clicked()"), self.chatClicked)
 	
 		QtCore.QMetaObject.connectSlotsByName(self)
 	
+
+	def urlExtract(self):
+		url = self.ui.url.text()
+		if "?" in url:
+			dataset = url.split("?")[1]
+			for data in dataset.split("&"):
+				key = data.split("=")[0]
+				value = data.split("=")[1]
+
+				if key == "q":
+					record = [str(v) for v in value.split("+")]
+					time_record = strftime("%Y-%m-%d %H:%M:%S", gmtime())
+					record.append(time_record)
+					self.writer.writerows([record])
+					
+
 	def chatClicked(self):
 		if self.chatClient.isHidden():
 			self.chatClient.show()
 		else:
 			self.chatClient.hide()
 
-	def test(self):
-		pass
 	
 	def url_changed(self):
 		"""
@@ -70,7 +91,6 @@ class httpWidget(QtGui.QWidget):
 		if (not ("http://" in url)) or (not ("https://")):
 			url = "http://" + url
 			
-
 		self.ui.webView.setUrl(QtCore.QUrl(url))
 		
 	def stop_page(self):
@@ -145,10 +165,7 @@ class httpWidget(QtGui.QWidget):
 			self.ui.next.setEnabled(False)
 
 	def closeEvent(self,e):
-		self.chatClient.send_socket.shutdown(socket.SHUT_WR)
-		self.chatClient.recv_socket.shutdown(socket.SHUT_WR)
-		self.chatClient.send_socket.close()
-		self.chatClient.recv_socket.close()
+		self.fp.close()
 
 
 	def keyPressEvent(self,e):
