@@ -51,6 +51,13 @@ class Ui_HttpWidget(object):
         self.url.setObjectName("url")
         self.horizontalLayout.addWidget(self.url)
 
+
+        # Chatting ui initialization
+        self.chat = QtGui.QPushButton(HttpWidget)
+        self.chat.setText('Chat')
+        self.chat.setObjectName('chat')
+        self.horizontalLayout.addWidget(self.chat)
+
         # Web View
         self.webViewLayout = QtGui.QVBoxLayout()
         self.webView = QtWebKit.QWebView(HttpWidget)
@@ -58,11 +65,6 @@ class Ui_HttpWidget(object):
         self.webView.setObjectName("webView")
  
 
-        # Chatting ui initialization
-        self.chat = QtGui.QPushButton(HttpWidget)
-        self.chat.setText('Chat')
-        self.chat.setObjectName('chat')
-        self.horizontalLayout.addWidget(self.chat)
         
         # Putting Together
         self.verticalLayout.addLayout(self.horizontalLayout)

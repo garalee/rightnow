@@ -44,7 +44,7 @@ class httpWidget(QtGui.QWidget):
 		QtCore.QObject.connect(self.ui.webView,QtCore.SIGNAL("loadFinished(bool)"),self.urlExtract)
 		QtCore.QObject.connect(self.ui.reload,QtCore.SIGNAL("clicked()"), self.reload_page)
 		QtCore.QObject.connect(self.ui.stop,QtCore.SIGNAL("clicked()"), self.stop_page)
-		#QtCore.QObject.connect(self.ui.chat,QtCore.SIGNAL("clicked()"), self.chatClicked)
+		QtCore.QObject.connect(self.ui.chat,QtCore.SIGNAL("clicked()"), self.chatClicked)
 	
 		QtCore.QMetaObject.connectSlotsByName(self)
 	
@@ -65,6 +65,7 @@ class httpWidget(QtGui.QWidget):
 					
 
 	def chatClicked(self):
+		
 		if self.chatClient.isHidden():
 			self.chatClient.show()
 		else:
