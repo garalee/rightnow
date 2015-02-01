@@ -1,18 +1,11 @@
 
 class User:
-
     def __init__(self):
-        self.query = []
+        self.groups = []
         self.ID = 0
         self.facebookID = 0
         self.passwd = ""
         self.ipaddr = ""
-    
-    def appendQuery(self,query):
-        self.query.append(query)
-        
-    def removeQuery(self,query):
-        self.query.remove(query)
 
 
     def __str__(self):

@@ -1,2 +1,2 @@
 
-__all__ = ['User','QueryData']
+__all__ = ['User','DataPacket','GroupDataModel']
