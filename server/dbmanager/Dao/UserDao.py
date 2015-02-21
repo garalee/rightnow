@@ -21,7 +21,7 @@ class UserDao:
 
         u = User.User()
         for i in a:
-            u.passwd = i['passwd']
+            u.passwd = i['password']
             u.facebookID = i['facebookID']
             u.ID = i['_id']
 
@@ -30,6 +30,7 @@ class UserDao:
     def deleteUser(self,user):
         user_collection = DB.User
         a = user_collection.remove({"_id":user.ID})
+        return a['ok']
 
     def insertUser(self,user):
         dbuser = {}
@@ -38,14 +39,14 @@ class UserDao:
 
         user_collection = DB.User
         result = user_collection.insert(dbuser)
-        print result
+        return result
         
 
     def updateUser(self,user):
         user_collection = DB.User
         result = user_collection.update({'_id' : user.ID}, {'$set' : 
                                                   {'facebookID': user.facebookID,
-                                                   'passwd' : user.passwd}},
+                                                   'password' : user.passwd}},
                                upsert=False)
         return result['updatedExisting']
         
