@@ -1,12 +1,14 @@
 import model
 import dbmanager
 
+
 from dbmanager import DBManager
 from model import User
 
-
 if __name__ == "__main__":
-    print "DB MANAGER TEST"
+    print "DB Manager Test File"
 
     d = DBManager.DBManager()
-    print d.selectUser(0)
+
+    user = User.User(0,0,'abcd')
+    d.deleteUser(user)

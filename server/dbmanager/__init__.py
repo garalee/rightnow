@@ -1,1 +1,2 @@
-__all__ = ['UserHandler','DBManager']
+__all__ = ['DBManager','MongoConnector']
+

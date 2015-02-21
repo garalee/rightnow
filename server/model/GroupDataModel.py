@@ -1,8 +1,9 @@
+
 class Words:
-    def __init__(self):
-        self.keywords = []
-        self.queries = []
-        self.words = []
+    def __init__(self,ID=0,keywords=[],queries=[]):
+        self.ID = 0
+        self.keywords = keywords
+        self.queries = queries
 
 class Group:
     def __init__(self):

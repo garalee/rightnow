@@ -1,19 +1,15 @@
 
 class User:
-    def __init__(self):
+    def __init__(self,ID='',facebookID='',passwd=''):
         self.groups = []
-        self.ID = 0
-        self.facebookID = 0
-        self.passwd = ""
+        self.ID = ID
+        self.facebookID = facebookID
+        self.passwd = passwd
         self.ipaddr = ""
 
 
     def __str__(self):
         l = "ID : " + str(self.ID) + ",Facebook ID: " + str(self.facebookID) + "\n"
 
-        for query in self.query:
-            l += str(query)
-
         l += "Password : " + self.passwd + '\n'
-        l += "IP address : " + self.ipaddr + '\n'
         return l
