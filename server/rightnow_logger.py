@@ -1,18 +1,18 @@
 # -*- conding: utf-8 -*-
 
 import logging
-from logging import getLogger,handlers.Formatter
+from logging import getLogger,handlers,Formatter
 
 
-LOGGER_NAME = 'rightnowlog'
+LOGGER_NAME = 'rightnowlogger'
 LOG_FILEPATH = 'log/rightnow.log'
 
 class Log:
     __log__level_map = {
         'debug' : logging.DEBUG,
-        'info' : logging.INFO
-        'warn' : logging.WARN
-        'error' : logging.ERROR
+        'info' : logging.INFO,
+        'warn' : logging.WARN,
+        'error' : logging.ERROR,
         'critical' : logging.CRITICAL
         }
 
@@ -21,7 +21,7 @@ class Log:
     @staticmethod
     def init(logger_name=LOGGER_NAME,log_level='debug', log_filepath=LOG_FILEPATH):
         Log.__my_logger = getLogger(logger_name)
-        Log.__my_logger.setLevel(Log.__log_level_map.get(log_level,'warn'))
+        Log.__my_logger.setLevel(Log.__log__level_map.get(log_level,'warn'))
         
         formatter = Formatter('%(asctime)s - %(levelname)s - %(message)s')
 

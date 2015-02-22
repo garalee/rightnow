@@ -7,8 +7,10 @@ class UserDao:
         user_collection = DB.User
         a = user_collection.find({"_id":ID})
 
-        u = User.User()
+        u = None
+
         for i in a:
+            u = User.User()
             u.passwd = i['password']
             u.facebookID = i['facebookID']
             u.ID = i['_id']
@@ -19,8 +21,9 @@ class UserDao:
         user_collection = DB.User
         a = user_collection.find({"facebookID" : facebookID})
 
-        u = User.User()
+        u = None
         for i in a:
+            u = User.User()
             u.passwd = i['password']
             u.facebookID = i['facebookID']
             u.ID = i['_id']

@@ -6,31 +6,30 @@ class GroupDao:
         words_collection = DB.Words
 
         w = {}
-        w['keywords'] = words.keywords
-        w['queries'] = words.queries
+        w['keywords'] = sorted(words.keywords)
+        w['queries'] = sorted(words.queries)
 
         return DB.Words.insert(w)
 
     def insertGroup(self,group):
         group_collection = DB.Group
-        words_collection = DB.Words
-
-        wordsID = self.insertWords(group.words)
         g = {}
-        g['wordsID'] = wordsID
-
+        g['wordsID'] = group.wordsID
         return group_collection.insert(g)
         
     def selectWordsByQueries(self,queries):
         words_collection = DB.Words
 
         w = {}
-        w['queries'] = queries
+        w['queries'] = sorted(queries)
 
         a = DB.Words.find(w)
-        words = GroupDataModel.Words()
+
+        words = None
 
         for i in a:
+            
+            words = GroupDataModel.Words()
             words.queries = i['queries']
             words.keywords = i['keywords']
             words.ID = i['_id']
@@ -42,12 +41,14 @@ class GroupDao:
         words_collection = DB.Words
         
         k = {}
-        k['keywords'] = keywords
+        k['keywords'] = sorted(keywords)
         
         a = DB.Words.find(k)
-        words = GroupDataModel.Words()
+
+        words = None
         
         for i in a:
+            words = GroupDataModel.Words()
             words.queries = i['queries']
             words.keywords = i['keywords']
             words.ID = i['_id']
@@ -59,34 +60,42 @@ class GroupDao:
         words_collection = DB.Words
 
         w = {}
-        w['queries'] = queries
-        w['keywords'] = keywords
+        w['queries'] = sorted(queries)
+        w['keywords'] = sorted(keywords)
 
         a = DB.Words.find(w)
-        words = GroupDataModel.Words()
+
+        words = None
 
         for i in a:
+            words = GroupDataModel.Words()
             words.queries = i['queries']
             words.keywords = i['keywords']
             words.ID = i['_id']
 
         return words
-
-
-    def selectGroupByQuery(self,query):
-        pass
     
     def selectGroupByID(self,groupID):
         group_collection = DB.Group
-        wordss_collection = DB.Words
-
         a = group_collection.find({"_id":groupID})
 
-        g = GroupDataModel.Group()
         
+        g = None
+ 
         for i in a:
+            g = GroupDataModel.Group()
             g.ID = i['_id']
+            g.wordsID = i['wordsID']
+
+        return g
 
 
-    def updateGroup(self,groupID):
-        pass
+    def deleteGroup(self,group):
+        group_collection = DB.Group
+        a = group_collection.remove({"_id": group.ID})
+        return a['ok']
+
+    def deleteWords(self,words):
+        group_collection = DB.Words
+        a = group_collection.remove({"_id": words.ID})
+        return a['ok']

@@ -8,4 +8,5 @@ class Words:
 class Group:
     def __init__(self):
         self.ID = 0
-        self.words = 0
+        self.wordsID = 0
+        self.words = Words()

@@ -1,8 +1,5 @@
 
 
-userfile = "test.xml"
-dictionaryfile = "dictionary.xml"
-
 server_data_ip = "127.0.0.1"
 server_chat_ip = "127.0.0.1"
 server_data_port = 12345

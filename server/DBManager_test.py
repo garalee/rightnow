@@ -4,25 +4,25 @@ import dbmanager
 
 from dbmanager import DBManager
 from model import User
+from model import GroupDataModel
 
 if __name__ == "__main__":
     print "DB Manager Test File\n"
     print "Testing Database Access Operation (User Table)"
 
     d = DBManager.DBManager()
+    
+    print "Creating New Group..."
+    words = GroupDataModel.Words()
+    group = GroupDataModel.Group()
 
-    print "Creating a New User...."
-    user = User.User(facebookID="abcdttt",passwd="rightnow")
-    userID = d.createUser(user)
-    print "Done... ID of the User is", userID
-    print ""
+    words.queries = ['python','sorted']
+    words.keywords = []
 
-    print "finding a User..."
-    user = d.findUserByID(userID)
-    print "Done... profile of the user :"
-    print user
-    print ""
+    group.words = words
 
-    print "Deleting a User..."
-    d.deleteUser(user)
+    d.createGroup(group)
+
     print "Done"
+    
+    
