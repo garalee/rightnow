@@ -11,8 +11,8 @@ if __name__ == "__main__":
     print "Testing Database Access Operation (User Table)"
 
     d = DBManager.DBManager()
-    
-    print "Creating New Group..."
+
+    print "Creating Group..."
     words = GroupDataModel.Words()
     group = GroupDataModel.Group()
 
@@ -20,8 +20,13 @@ if __name__ == "__main__":
     words.keywords = []
 
     group.words = words
-
     d.createGroup(group)
+    
+    print "Selecting Group...."
+
+    queries = ['python','sorted']
+    if d.groupExistsByQueries(queries) == True:
+        print "YES"
 
     print "Done"
     

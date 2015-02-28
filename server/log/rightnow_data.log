@@ -1,0 +1,4 @@
+2015-02-26 22:27:22,010 - INFO - Starting Server...
+2015-02-26 22:27:22,013 - INFO - Chat Socket Initialized
+2015-02-26 22:27:22,013 - INFO - Connecting To Data Manager
+2015-02-26 22:27:22,024 - DEBUG - ChatToData Socket Connected

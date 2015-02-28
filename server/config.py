@@ -14,5 +14,7 @@ class RightnowConfig(object):
 
     MAX_SIZE_FROM_CLIENT = 1024
 
-    LOG_FILE_PATH = 'log/rightnow.log'
-    LOGGER_NAME = 'rightnowlogger'
+    LOG_FILE_PATH_CHAT = 'log/rightnow_chat.log'
+    LOG_FILE_PATH_DATA = 'log/rightnow_data.log'
+    LOGGER_NAME_CHAT = 'rightnowlogger_chat'
+    LOGGER_NAME_DATA = 'rightnowlogger_data'

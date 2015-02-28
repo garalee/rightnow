@@ -32,6 +32,7 @@ class DM(threading.Thread):
 class CM(threading.Thread):
     def __init__(self):
         self.c = ChatManager.ChatManager()
+
     def run(self):
         if self.c.socket_init() == -1:
             Log.info("Program Exited")

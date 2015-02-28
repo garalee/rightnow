@@ -34,10 +34,15 @@ class DBManager:
 
 # Group Operations
     def createGroup(self,group):
-        wordsID = self.groupDao.insertWords(group.words)
-        group.wordsID = wordsID
+        words = self.groupDao.selectWordsByQueries(group.words.queries)
+        if  words== None:
+            wordsID = self.groupDao.insertWords(group.words)
+            group.wordsID = wordsID
 
-        return self.groupDao.insertGroup(group)
+            return self.groupDao.insertGroup(group)
+        else:
+            return words.ID
+        
 
     # return True if given queries are already in the database
     # return False otherwise
