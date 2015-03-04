@@ -9,7 +9,7 @@ class GroupDao:
         w['keywords'] = sorted(words.keywords)
         w['queries'] = sorted(words.queries)
 
-        return DB.Words.insert(w)
+        return words_collection.insert(w)
 
     def insertGroup(self,group):
         group_collection = DB.Group
@@ -74,12 +74,24 @@ class GroupDao:
             words.ID = i['_id']
 
         return words
+
+    def selectGroupByWordsID(self,wordsID):
+        group_collection = DB.Group
+        a = group_collection.find({"WordsID" : words.ID})
+
+        g = None
+
+        for i in a:
+            g = GroupDataModel.Group()
+            g.ID = i['_id']
+            g.wordsID = i['wordsID']
+
+        return g
     
     def selectGroupByID(self,groupID):
         group_collection = DB.Group
         a = group_collection.find({"_id":groupID})
 
-        
         g = None
  
         for i in a:

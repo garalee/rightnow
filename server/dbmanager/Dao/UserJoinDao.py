@@ -9,16 +9,26 @@ class UserJoinDao:
         gJoin['groupID'] = groupID
         gJoin['userID'] = userID
 
-        groupJoin_collection = DB.User
-        return groupJoin_collection.insert(gJoin)
+        userJoin_collection = DB.UserJoin
+        return userJoin_collection.insert(gJoin)
         
 
     def disjoinGroup(self,groupID,userID):
-        groupJoin_collection = DB.User
+        userJoin_collection = DB.UserJoin
 
         gJoin = {}
         gJoin['groupID'] = groupID
         gJoin['userID'] = userID
 
-        a = groupJoin_collection.remove(gJoin)
+        a = userJoin_collection.remove(gJoin)
         return a['ok']
+
+    def selectUserByGroupID(self,groupID):
+        userJoin_collection = DB.UserJoin
+        userIDs = []
+
+        a = userJoin_collection.find({"groupID":groupID})
+        for i in a:
+            userIDs.append(i['userID'])
+
+        return userIDs

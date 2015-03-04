@@ -1,2 +1,2 @@
-__all__ = ['DBManager','MongoConnector']
+__all__ = ['dbmanager','MongoConnector']
 
