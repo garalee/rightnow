@@ -6,7 +6,7 @@ class Words:
         self.queries = queries
 
 class Group:
-    def __init__(self):
+    def __init__(self,wordsID=None,words=None):
         self.ID = 0
-        self.wordsID = 0
-        self.words = Words()
+        self.wordsID = wordsID
+        self.words = words

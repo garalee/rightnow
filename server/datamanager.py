@@ -1,8 +1,17 @@
 import socket
 from rightnow_logger import Log
 from config import RightnowConfig
+from model import DataPacket
+from smartgr import gren
+
+import packetmanager
+
+MAX_DATA_SIZE_FROM_CLIENT = 256      # Maximum bytes received from Client
 
 class DataManager:
+    def __init__(self):
+        self.sgr = gren.SGR()
+
     def socket_init(self):
         try:
             self.data_socket = socket.socket(socket.AF_INET,socket.SOCK_DGRAM)
@@ -30,8 +39,18 @@ class DataManager:
         return 0
 
     def run(self):
+        print "Succeed to Run(Data)"
         while True:
-            (data,address) = self.data_socket.recvfrom(MAX_SIZE_FROM_CLIENT)
+            try:
+                (data,address) = self.data_socket.recvfrom(MAX_DATA_SIZE_FROM_CLIENT)
+                datapacket = pm.dataunpack(data)
+                datapacket.address = address
+                self.sgr.runSGR(datapacket)
+            except socket.error,msg:
+                Log.error(error)
+                Log.info("Program Exit")
+                break
+        
             
 if __name__ == "__main__":
     d = DataManager()

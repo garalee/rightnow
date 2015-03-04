@@ -1,4 +1,8 @@
-2015-02-26 22:27:22,010 - INFO - Starting Server...
-2015-02-26 22:27:22,013 - INFO - Chat Socket Initialized
-2015-02-26 22:27:22,013 - INFO - Connecting To Data Manager
-2015-02-26 22:27:22,024 - DEBUG - ChatToData Socket Connected
+2015-03-03 16:59:03,097 - INFO - Starting Server...
+2015-03-03 16:59:03,098 - INFO - Chat Socket Initialized
+2015-03-03 16:59:03,098 - INFO - Connecting To Data Manager
+2015-03-03 16:59:03,099 - ERROR - [Errno 111] Connection refused
+2015-03-03 17:06:31,451 - INFO - Starting Server...
+2015-03-03 17:06:31,452 - INFO - Chat Socket Initialized
+2015-03-03 17:06:31,452 - INFO - Connecting To Data Manager
+2015-03-03 17:06:31,453 - DEBUG - ChatToData Socket Connected

@@ -1,6 +1,9 @@
 import socket
 from rightnow_logger import Log
 from config import RightnowConfig
+from model import ChatPacket
+
+MAX_CHAT_SIZE_FROM_CLIENT=256
 
 class ChatManager:
     def socket_init(self):
@@ -33,7 +36,28 @@ class ChatManager:
         return 0
 
     def run(self):
-        print "Succeed to Run"
+        print "Succeed to Run(Chat)"
+        while True:
+            try:
+                (data,address) = self.chat_socket.recvfrom(MAX_CHAT_SIZE_FROM_CLIENT)
+                chatpacket = pm.chatunpack(data)
+                chatpacket.address = address
+                
+                userIDs = self.db.getUserIDByGroupID(chatpacket.groupID)
+                ips = []
+
+                for i in userIDs:
+                    ips.append(self.db.getIPs(i))
+
+                # Sending Message To The Group
+                for i in ips:
+                    # send
+                    pass
+                break
+            except socket.error,msg:
+                Log.error(msg)
+                Log.info("Program Exit")
+                break
 
 if __name__ == "__main__":
     c = ChatManager()
