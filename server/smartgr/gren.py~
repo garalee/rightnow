@@ -18,13 +18,13 @@ class SGR:
 			
 	def queryMatching(self,datapacket):
 		if self.db.groupExistsByQueries(datapacket.data):
-			group = self.db.findGroupByQueries(datapacket.data)
+			group = db.findGroupByQueries(datapacket.data)
 		else:
 			words = GroupDataModel.Words(queries = datapacket.data)
 			group = GroupDataModel.Group(words=words)
-			group.ID = self.db.createGroup(group)
+			group.ID = db.createGroup(group)
 			
-		self.db.joinUser(datapacket.ID, group.ID)
+		db.joinUser(datapacket.ID, group.ID)
 
 
 	def getUserInfo( self, username, IPaddr ):
