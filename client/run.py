@@ -5,12 +5,40 @@ import socket
 from chat import ChatClient
 from PyQt4 import QtCore, QtGui
 from httpWidget import Ui_HttpWidget
+import urllib
+from urlparse import parse_qsl
+
+#from pyfb import Pyfb
 
 from time import gmtime,strftime
 
+#from alchemy import parsing
+from client import sendtosvr
+from ChatClient import chat_client
+#11from ChatRoomWidget import main
+from ChatRoomWidget import ChatRoomWidget
+
 import csv
 
+is_first = 0
+email_id = 'abc@facebook.com'#'Default'
+clisock = 0
+groupID = 0
+
+def setGroupID( gid ):
+	global groupID
+	groupID = gid
+
+	print 'groupID: ', groupID
+
 class httpWidget(QtGui.QWidget):
+	global is_first
+	is_first = 0
+
+	global clisock
+	#22clisock = socket.socket( socket.AF_INET, socket.SOCK_STREAM )
+	clisock = socket.socket( socket.AF_INET, socket.SOCK_DGRAM )
+
 	def __init__(self,parent=None):
 		super(httpWidget, self).__init__(parent)
 		self.ui = Ui_HttpWidget()
@@ -23,17 +51,32 @@ class httpWidget(QtGui.QWidget):
 		l = self.layout()
 		l.setMargin(0)
 		self.ui.horizontalLayout.setMargin(5)
-		
+
+		#############################################################################
+		#Part for FACEBOOK Authentication											#
+		# remove '#1.' when FACEBOOK login is needed								#
+		#############################################################################
+
+		#1. FACEBOOK_APP_ID = '178358228892649'
+		#1. self.facebook = Pyfb(FACEBOOK_APP_ID)
+		#############################################################################
+		##>facebook.authenticate()													#
+		#############################################################################
+		#1. self.facebook.set_permissions(["user_about_me", "email"])
+		#1. url = urllib.unquote( self.facebook.get_auth_url() )
+
 		# set the default
-		url = 'http://localhost:8080'
+		##>url = 'http://localhost:8080'
+		##>url = 'https://www.facebook.com/dialog/oauth?scope=user_about_me&redirect_uri=http://www.facebook.com/connect/login_success.html&type=user_agent&client_id=178358228892649'
+		url = 'http://www.google.com/'	# comment when FACEBOOK login is needed
 		self.ui.url.setText(url)
-		
+
 		# load page
 		self.ui.webView.setUrl(QtCore.QUrl(url))
 		# history buttons:
 		self.ui.back.setEnabled(False)
 		self.ui.next.setEnabled(False)
-		
+
 		QtCore.QObject.connect(self.ui.back,QtCore.SIGNAL("clicked()"), self.back)
 		QtCore.QObject.connect(self.ui.next,QtCore.SIGNAL("clicked()"), self.next)
 		QtCore.QObject.connect(self.ui.url,QtCore.SIGNAL("returnPressed()"), self.url_changed)
@@ -44,13 +87,17 @@ class httpWidget(QtGui.QWidget):
 		QtCore.QObject.connect(self.ui.webView,QtCore.SIGNAL("loadFinished(bool)"),self.urlExtract)
 		QtCore.QObject.connect(self.ui.reload,QtCore.SIGNAL("clicked()"), self.reload_page)
 		QtCore.QObject.connect(self.ui.stop,QtCore.SIGNAL("clicked()"), self.stop_page)
+
 		QtCore.QObject.connect(self.ui.chat,QtCore.SIGNAL("clicked()"), self.chatClicked)
 	
 		QtCore.QMetaObject.connectSlotsByName(self)
 	
 
 	def urlExtract(self):
+		global is_first
+
 		url = self.ui.url.text()
+
 		if "?" in url:
 			dataset = url.split("?")[1]
 			for data in dataset.split("&"):
@@ -62,20 +109,87 @@ class httpWidget(QtGui.QWidget):
 					time_record = strftime("%Y-%m-%d %H:%M:%S", gmtime())
 					record.append(time_record)
 					self.writer.writerows([record])
-					
+
+		if "#" in url:
+			global email_id
+			dataset = url.split("#")[1]
+			for data in dataset.split("&"):
+				key = data.split("=")[0]
+				value = data.split("=")[1]
+
+				#1. if key == "access_token":
+				#1. 	access_token = value
+				#1. 	self.facebook.set_access_token(access_token)
+				#1. 	self.facebook.set_permissions("email")
+				#1. 	me = self.facebook.get_myself()
+				#1. 	print "-" * 40
+				#1. 	print "ID\t: %s" % me.id
+				#1. 	print "E-mail\t: %s" % me.email
+				#1. 	email_id = me.email
+				#1. 	print "Name\t: %s" % me.name
+				#1. 	print "From\t: %s" % me.hometown.name
+				#1. 	print
+
+					#print "Speaks:"
+					#for language in me.language:
+					#    print "- %s" % language.name
+
+				#1. 	print
+				#1. 	print "Worked at:"
+				#1. 	for work in me.work:
+				#1. 		print "- %s" % work.employer.name
+
+				#1. 	print "-" * 40
+				#1. 	self.ui.webView.setUrl(QtCore.QUrl("http://www.google.com/"))
+					###is_first = 1
+
+		## ??? added part
+#		print "url: ", url
+		print
+		print
+		print 
+#		page1 = self.ui.webView.page()
+#		frame = page1.currentFrame()
+#		content = frame.toHtml()
+
+#		print unicode( content ).encode('utf-8')
+		#parsing( unicode( content ).encode('utf-8') )
+		if is_first == 1:
+			if "?" in url:
+				dataset = url.split("?")[1]
+				for data in dataset.split("&"):
+					key = data.split("=")[0]
+					value = data.split("=")[1]
+
+					if key == "q":
+						record = [str(v) for v in value.split("+")]
+						record.append( email_id )
+#2						print record
+						sendtosvr(clisock, ','.join(record))
+#1			parsing( url )
+
+		is_first = 1
+		## ??? added part
+
 
 	def chatClicked(self):
-		
+		"""
 		if self.chatClient.isHidden():
 			self.chatClient.show()
 		else:
 			self.chatClient.hide()
+		"""
+		#--chat_client( 'localhost', 2626)
+		#11main(sys.argv, 'adf')
+		self.chroom = ChatRoomWidget(self)
+		self.chroom.show()
 
 	
 	def url_changed(self):
 		"""
 		Url have been changed by user
 		"""
+
 		page = self.ui.webView.page()
 		history = page.history()
 		if history.canGoBack():
@@ -93,7 +207,7 @@ class httpWidget(QtGui.QWidget):
 			url = "http://" + url
 			
 		self.ui.webView.setUrl(QtCore.QUrl(url))
-		
+
 	def stop_page(self):
 		"""
 		Stop loading the page
@@ -131,6 +245,11 @@ class httpWidget(QtGui.QWidget):
 			self.ui.next.setEnabled(False)
 		
 		self.ui.url.setText(url.toString())
+
+		## ??? added part
+		#print "TEST: ", url.toString()
+		## ??? added part
+
 	
 	def load_progress(self, load):
 		"""
@@ -173,7 +292,8 @@ class httpWidget(QtGui.QWidget):
 		if ((e.key() == QtCore.Qt.Key_L) and (QtGui.QApplication.keyboardModifiers() & QtCore.Qt.ControlModifier)):
 			self.ui.url.selectAll()
 			self.ui.url.setFocus()
-	
+
+
 
 if __name__ == "__main__":
 	app = QtGui.QApplication(sys.argv)
