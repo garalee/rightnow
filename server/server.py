@@ -6,8 +6,8 @@ import threading
 import DataManager
 import ChatManager
 
-logger_name = RightnowConfig.LOGGER_NAME
-log_filepath = RightnowConfig.LOG_FILE_PATH
+logger_name = RightnowConfig.LOGGER_NAME_DATA
+log_filepath = RightnowConfig.LOG_FILE_PATH_DATA
 from rightnow_logger import Log
 Log.init(logger_name = logger_name,log_filepath=log_filepath)
 
@@ -22,9 +22,9 @@ class DM(threading.Thread):
             exit(-1)
 
         Log.info("Data Socket Initialized")
-        Log.info("Wait For Chatting Manager...")
-        if self.d.connecting_chat() == 0: Log.info("DataToChat Socket Connected")
-        else: exit(-1)
+        #1Log.info("Wait For Chatting Manager...")
+        #1if self.d.connecting_chat() == 0: Log.info("DataToChat Socket Connected")
+        #1else: exit(-1)
 
         self.d.run()
 

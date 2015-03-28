@@ -1,34 +1,36 @@
 from dbmanager.Dao import DB
 from model import GroupDataModel
 from model import User
+import datetime
 
 
 class UserJoinDao:
-    def joinGroup(self,groupID,userID):
-        gJoin = {}
-        gJoin['groupID'] = groupID
-        gJoin['userID'] = userID
+	def joinGroup(self,groupID,userID):
+		gJoin = {}
+		gJoin['groupID'] = groupID
+		gJoin['userID'] = userID
+		gJoin['date'] = datetime.datetime.utcnow()
 
-        userJoin_collection = DB.UserJoin
-        return userJoin_collection.insert(gJoin)
-        
+		userJoin_collection = DB.UserJoin
+		return userJoin_collection.insert(gJoin)
 
-    def disjoinGroup(self,groupID,userID):
-        userJoin_collection = DB.UserJoin
 
-        gJoin = {}
-        gJoin['groupID'] = groupID
-        gJoin['userID'] = userID
+	def disjoinGroup(self,groupID,userID):
+		userJoin_collection = DB.UserJoin
 
-        a = userJoin_collection.remove(gJoin)
-        return a['ok']
+		gJoin = {}
+		gJoin['groupID'] = groupID
+		gJoin['userID'] = userID
 
-    def selectUserByGroupID(self,groupID):
-        userJoin_collection = DB.UserJoin
-        userIDs = []
+		a = userJoin_collection.remove(gJoin)
+		return a['ok']
 
-        a = userJoin_collection.find({"groupID":groupID})
-        for i in a:
-            userIDs.append(i['userID'])
+	def selectUserByGroupID(self,groupID):
+		userJoin_collection = DB.UserJoin
+		userIDs = []
 
-        return userIDs
+		a = userJoin_collection.find({"groupID":groupID})
+		for i in a:
+			userIDs.append(i['userID'])
+
+		return userIDs

@@ -1,12 +1,12 @@
 from dbmanager.Dao import DB
 from model import User
+from bson.objectid import ObjectId
 
 
 class UserDao:
     def selectUserByID(self,ID):
         user_collection = DB.User
-        a = user_collection.find({"_id":ID})
-
+        a = user_collection.find({"_id":ObjectId(ID)})
         u = None
 
         for i in a:
@@ -20,7 +20,6 @@ class UserDao:
     def selectUserByFacebookID(self,facebookID):
         user_collection = DB.User
         a = user_collection.find({"facebookID" : facebookID})
-
         u = None
         for i in a:
             u = User.User()
@@ -32,7 +31,7 @@ class UserDao:
 
     def deleteUser(self,user):
         user_collection = DB.User
-        a = user_collection.remove({"_id":user.ID})
+        a = user_collection.remove({"_id":ObjectId(user.ID)})
         return a['ok']
 
     def insertUser(self,user):
@@ -47,7 +46,7 @@ class UserDao:
 
     def updateUser(self,user):
         user_collection = DB.User
-        result = user_collection.update({'_id' : user.ID}, {'$set' : 
+        result = user_collection.update({'_id' : ObjectId(user.ID)}, {'$set' : 
                                                   {'facebookID': user.facebookID,
                                                    'password' : user.passwd}},
                                upsert=False)

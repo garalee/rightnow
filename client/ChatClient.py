@@ -10,8 +10,11 @@ SIZEOF_UINT32 = 4
 
 class ChatOn(QDialog):
 
-	def __init__(self, parent=None):
+	def __init__(self, parent=None, groupId=None):
 		super(ChatOn, self).__init__(parent)
+
+		self.groupID = groupId
+		print 'groupID+++: ',groupId, ' / ', self.groupID
 
 		# Ititialize socket
 		self.socket = QTcpSocket()

@@ -6,7 +6,7 @@
 # queries (16*8byte) sending 8 queries at once
 # keywords (4*64byte) sending 64 keywords at once
 
-class DataPakcet:
+class DataPacket:
     def __init__(self,ID=0,flag=0,data=[]):
         self.ID = ID
         self.flag = flag

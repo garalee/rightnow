@@ -1,29 +1,25 @@
 import sys
 from PyQt4.Qt import *
 from ChatClient import ChatOn
-import ChatWidget
 
 from client import asktoDM
 
 import thread
 
-class MyPopup(QWidget):
-	def __init__(self):
-		QWidget.__init__(self)
-		open_client()
-
-
 
 class ChatRoomWidget(QMainWindow):
-	def __init__(self, parent=None):
+	userId = None
+
+	def __init__(self, parent=None, username=None):
 		QMainWindow.__init__(self, parent)
+		self.username = username
 		self.setWindowTitle("Chating Room")
 		self.create_main_frame()
 
 	def create_main_frame(self):
-		print 'Queries @ Chat Room'
-		words = asktoDM()
-		#2print words.queries
+		print 'Queries @ Chat Room: ',self.username
+		words = asktoDM(self.username)
+		print words
 
 		page = QWidget()
 #		self.button1 = QPushButton('keyword 1', page)
@@ -41,7 +37,7 @@ class ChatRoomWidget(QMainWindow):
 
 
 		print 'len:', len(self.button)
-		print self.button[1]
+		print self.button[0]
 		vbox1 = QVBoxLayout()
 #2		vbox1.addWidget(self.button1)
 #2		vbox1.addWidget(self.button2)
@@ -54,49 +50,19 @@ class ChatRoomWidget(QMainWindow):
 		page.setLayout(vbox1)
 		self.setCentralWidget(page)
 
+		tempstr = '1212121212'
+
 		for x in xrange(0, idx1):
-			self.connect(self.button[x], SIGNAL("clicked()"), self.doit)		
+			self.connect(self.button[x], SIGNAL("clicked()"), self.doit(tempstr))		
 
 #2		self.connect(self.button1, SIGNAL("clicked()"), self.doit)
 #2		self.connect(self.button2, SIGNAL("clicked()"), self.doit)
 
-	def doit(self):
+	def doit(self, tstr):
 		print "opening a new popup window"
-		##self.w = MyPopup()
-#3		#11self.w.setGeometry(Qrect(100, 100, 400, 200))
-		##self.w.setGeometry(100, 100, 400, 200)
-		##self.w.show()
-		###thread.start_new_thread(open_client())
-		self.chat = ChatOn(self)
+		self.chat = ChatOn(self, tstr)
 		self.chat.show()
 
-		#3self.wind = ChatWidget(self)
-		#3self.wind.open_client()
-		#4self.tkt = Example()
-		#4main()
-
-	def callChRoom(args, aaa):
-		print aaa
-
-
-"""
-class App(QApplication):
-	def __init__(self, *args):
-		QApplication.__init__(self, *args)
-		self.main = MainWindow()
-		self.connect(self, SIGNAL("lastWindowClosed()"), self.byebye)
-		self.main.show()
-
-	def byebye(self):
-		self.exit(0)
-"""
-"""
-def main(args, aaa):
-	print aaa
-	global app
-	app = App(args)
-	app.exec_()
-"""
 
 if __name__ == "__main__":
 	chatroom = QtGui.QApplication(sys.argv)

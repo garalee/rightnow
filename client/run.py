@@ -2,26 +2,28 @@
 import sys
 import threading
 import socket
-from chat import ChatClient
+#######from chat import ChatClient
 from PyQt4 import QtCore, QtGui
 from httpWidget import Ui_HttpWidget
 import urllib
 from urlparse import parse_qsl
 
-#from pyfb import Pyfb
+from Util import returnRId
+
+#1. from pyfb import Pyfb
 
 from time import gmtime,strftime
 
 #from alchemy import parsing
 from client import sendtosvr
-from ChatClient import chat_client
-#11from ChatRoomWidget import main
+#######from ChatClient import chat_client
 from ChatRoomWidget import ChatRoomWidget
 
 import csv
 
 is_first = 0
-email_id = 'abc@facebook.com'#'Default'
+#1. email_id = 'abc@facebook.com'#'Default'
+email_id = None
 clisock = 0
 groupID = 0
 
@@ -54,7 +56,7 @@ class httpWidget(QtGui.QWidget):
 
 		#############################################################################
 		#Part for FACEBOOK Authentication											#
-		# remove '#1.' when FACEBOOK login is needed								#
+		# remove '#1. ' when FACEBOOK login is needed								#
 		#############################################################################
 
 		#1. FACEBOOK_APP_ID = '178358228892649'
@@ -94,7 +96,7 @@ class httpWidget(QtGui.QWidget):
 	
 
 	def urlExtract(self):
-		global is_first
+		global is_first, email_id
 
 		url = self.ui.url.text()
 
@@ -111,7 +113,6 @@ class httpWidget(QtGui.QWidget):
 					self.writer.writerows([record])
 
 		if "#" in url:
-			global email_id
 			dataset = url.split("#")[1]
 			for data in dataset.split("&"):
 				key = data.split("=")[0]
@@ -145,15 +146,15 @@ class httpWidget(QtGui.QWidget):
 
 		## ??? added part
 #		print "url: ", url
-		print
-		print
-		print 
+
 #		page1 = self.ui.webView.page()
 #		frame = page1.currentFrame()
 #		content = frame.toHtml()
 
 #		print unicode( content ).encode('utf-8')
 		#parsing( unicode( content ).encode('utf-8') )
+
+		# From 2nd url extraction(is_first == 1), queries should be sent to DataManager in Server
 		if is_first == 1:
 			if "?" in url:
 				dataset = url.split("?")[1]
@@ -167,7 +168,13 @@ class httpWidget(QtGui.QWidget):
 #2						print record
 						sendtosvr(clisock, ','.join(record))
 #1			parsing( url )
+		else:
+			# If system needs to keep Facebook email id as a username, then send a flag telling Facebook ID or temp ID.
+			# So, let Data Server not delete Facebook ID based on the flag even it is expired. 
+			if email_id == None :
+				email_id = returnRId()
 
+		print 'email_id: ', email_id
 		is_first = 1
 		## ??? added part
 
@@ -181,10 +188,11 @@ class httpWidget(QtGui.QWidget):
 		"""
 		#--chat_client( 'localhost', 2626)
 		#11main(sys.argv, 'adf')
-		self.chroom = ChatRoomWidget(self)
+		global email_id
+		self.chroom = ChatRoomWidget(self, email_id)
 		self.chroom.show()
 
-	
+
 	def url_changed(self):
 		"""
 		Url have been changed by user

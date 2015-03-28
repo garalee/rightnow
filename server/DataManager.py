@@ -49,25 +49,19 @@ class DataManager:
 				rcvdatapacket = pm.dataunpack(data)
 				rcvdatapacket.address = address
 
-				print 'run.'
-
 				user = self.sgr.getUserInfo( rcvdatapacket.ID[0], address )
 
-				print 'run2.'
-
 				if pm.isquery( rcvdatapacket ) == True:
-					print 'run3.'
-
 					#1self.sgr.runSGR(rcvdatapacket)
 					self.sgr.queryMatching( rcvdatapacket )
 				else:
-					print "flag 1"
 					# Get Queries Of Group By FacebookID
 					#1user = self.d.findUserByFacebookID( objrcv.username[0] )
+					print 'user.ID; ',user.ID
 					group = self.db.selectGroupByUserID( user.ID )
 
 					dp = []
-				
+
 					for gg in group:
 						words = self.db.selectWordsByGroupID( gg.groupID )
 						dp.append(DataPacket.DataPacket( '', 2, words.queries ))

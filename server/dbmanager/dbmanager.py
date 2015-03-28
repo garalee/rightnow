@@ -14,7 +14,7 @@ class DBManager:
 		self.groupDao = GroupDao.GroupDao()
 		self.userJoinDao = UserJoinDao.UserJoinDao()
 		self.iptableDao = IPTableDao.IPTableDao()
-		self._semaphores = Semaphore(5)
+		self._semaphores = Semaphore(10)
 
 # User Operations
 	def createUser(self,user):
@@ -28,6 +28,7 @@ class DBManager:
 		self._semaphores.acquire()
 		r = self.userDao.selectUserByID(ID)
 		self._semaphores.release()
+		return r
 
 	def findUserByFacebookID(self,facebookID):
 		self._semaphores.acquire()
@@ -65,7 +66,7 @@ class DBManager:
 			group.wordsID = wordsID
 
 			r = self.groupDao.insertGroup(group)
-			self._semapohres.release()
+			self._semaphores.release()
 			return r
 	
 	def findGroupByQueries(self,queries):
@@ -73,11 +74,12 @@ class DBManager:
 		words = self.groupDao.selectWordsByQueries(queries)
 		self._semaphores.release()
 
-		if words == None: return None
+		if words == None:
+			return None
 		else: 
 			self._semaphores.acquire()
 			r = self.groupDao.selectGroupByWordsID(words.ID)
-			self._semapohres.release()
+			self._semaphores.release()
 			return r
 		
 
@@ -88,7 +90,6 @@ class DBManager:
 		r = self.groupDao.selectWordsByQueries(queries)
 		self._semaphores.release()
 
-	
 		if r == None:
 			return False
 		return True

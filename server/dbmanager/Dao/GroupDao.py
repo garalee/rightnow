@@ -1,5 +1,6 @@
 from dbmanager.Dao import DB
 from model import GroupDataModel
+from bson.objectid import ObjectId
 
 class GroupDao:
 	def insertWords(self,words):
@@ -77,7 +78,7 @@ class GroupDao:
 
 	def selectGroupByWordsID(self,wordsID):
 		group_collection = DB.Group
-		a = group_collection.find({"WordsID" : words.ID})
+		a = group_collection.find({"wordsID" : ObjectId(wordsID)})
 
 		g = None
 
@@ -90,7 +91,7 @@ class GroupDao:
 	
 	def selectGroupByID(self,groupID):
 		group_collection = DB.Group
-		a = group_collection.find({"_id":groupID})
+		a = group_collection.find({"_id": ObjectId(groupID)})
 
 		g = None
  
@@ -102,12 +103,15 @@ class GroupDao:
 		return g
 
 	def selectGroupByUserID(self,userID):
-		group_collection = DB.User
-		a = group_collection.find({"userID":userID})
+		group_collection = DB.UserJoin
+		print 'userID: ',userID
+		a = group_collection.find({"userID":ObjectId(userID)}).sort( [('date', -1)] )
 
 		g = None
 		gr = []
- 
+
+ 		print '1. gr: ', gr
+
 		for i in a:
 			g = GroupDataModel.Group()
 			g.ID = i['_id']
@@ -116,13 +120,14 @@ class GroupDao:
 			#0print '-----------', g.ID
 			gr.append(g)
 
+ 		print '2. gr: ', gr
 #2		return g
 		return gr
 
 	def selectWordsByGroupID(self,groupID):
 		group_collection = DB.Group
 		#0print 'gID: ',groupID
-		a = group_collection.find({"_id":groupID})
+		a = group_collection.find({"_id": ObjectId(groupID)})
 
 
 		#0print 'A:',a[0]
@@ -151,10 +156,10 @@ class GroupDao:
 
 	def deleteGroup(self,group):
 		group_collection = DB.Group
-		a = group_collection.remove({"_id": group.ID})
+		a = group_collection.remove({"_id": ObjectId(group.ID)})
 		return a['ok']
 
 	def deleteWords(self,words):
 		group_collection = DB.Words
-		a = group_collection.remove({"_id": words.ID})
+		a = group_collection.remove({"_id": ObjectId(words.ID)})
 		return a['ok']
