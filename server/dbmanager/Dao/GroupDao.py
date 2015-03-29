@@ -104,13 +104,13 @@ class GroupDao:
 
 	def selectGroupByUserID(self,userID):
 		group_collection = DB.UserJoin
-		print 'userID: ',userID
+		#%print 'userID: ',userID
 		a = group_collection.find({"userID":ObjectId(userID)}).sort( [('date', -1)] )
 
 		g = None
 		gr = []
 
- 		print '1. gr: ', gr
+ 		#%print '1. gr: ', gr
 
 		for i in a:
 			g = GroupDataModel.Group()
@@ -120,7 +120,7 @@ class GroupDao:
 			#0print '-----------', g.ID
 			gr.append(g)
 
- 		print '2. gr: ', gr
+ 		#%print '2. gr: ', gr
 #2		return g
 		return gr
 

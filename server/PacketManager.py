@@ -19,32 +19,11 @@ class PacketManager:
 
 	@staticmethod
 	def datapack(datapacket):
-		"""#1
-		p = pack('III',datapacket.ID,datapacket.flag,datapacket.data_len)
-
-		for i in datapacket.data:
-			p += pack('16s',i)
-		
-		return p
-		"""
 		return pickle.dumps( datapacket )
 
 
 	@staticmethod
 	def dataunpack(packed):
-		"""#1
-		datapacket = DataPacket.DataPacket()
-		datapacket.ID = unpack('I',packed[0:4])
-		packed = packed[4:]
-		datapacket.flag = unpack('I',packed[0:4])
-		packed = packed[4:]
-		datapacket.data_len = unpack('I',packed[0:4])
-		packed = packed[4:]
-
-		for i in range(datapacket.data_len):
-			datapacket.data.append(unpack('16s',p[0:16]).split('\x00'))
-			packed = packed[16:]
-		"""
 		datapacket = pickle.loads( packed )
 		return datapacket
 

@@ -57,14 +57,16 @@ class DataManager:
 				else:
 					# Get Queries Of Group By FacebookID
 					#1user = self.d.findUserByFacebookID( objrcv.username[0] )
-					print 'user.ID; ',user.ID
+					#%print 'user.ID; ',user.ID
 					group = self.db.selectGroupByUserID( user.ID )
 
 					dp = []
 
 					for gg in group:
+						#%print 'gg.groupID: ',gg.groupID
 						words = self.db.selectWordsByGroupID( gg.groupID )
-						dp.append(DataPacket.DataPacket( '', 2, words.queries ))
+						dp.append( DataPacket.DataPacket(gg.groupID, 2, words.queries) )
+
 					self.data_socket.sendto( pickle.dumps(dp), address )
 			except socket.error,msg:
 				Log.error(error)
