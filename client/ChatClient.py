@@ -14,7 +14,7 @@ class ChatOn(QDialog):
 		super(ChatOn, self).__init__(parent)
 
 		self.groupID = groupId
-		print 'groupID+++: ',groupId, ' / ', self.groupID
+		###print 'groupID+++: ',groupId, ' / ', self.groupID
 
 		# Ititialize socket
 		self.socket = QTcpSocket()
@@ -57,6 +57,7 @@ class ChatOn(QDialog):
 	def connectToServer(self):
 		self.connectButton.setEnabled(False)
 		self.socket.connectToHost('localhost', PORT)
+		print 'Local IP port', self.socket.localAddress().toString(), '/', self.socket.localPort()
 
 	def issueRequest(self):
 		self.request = QByteArray()
@@ -64,10 +65,11 @@ class ChatOn(QDialog):
 		stream.setVersion(QDataStream.Qt_4_2)
 		stream.writeUInt32(0)
 		if self.firstTime:
-			stream << QString("AUTH") << QString(self.lineedit.text())
+			stream << QString("AUTH") << QString(self.lineedit.text()) << QString(str(self.groupID))
 			self.firstTime = False
 		else:
-			stream << QString("SEND") << QString(self.lineedit.text())
+#org			stream << QString("SEND") << QString(self.lineedit.text())
+			stream << QString("SEND") << QString(self.lineedit.text()) << QString(str(self.groupID))
 		stream.device().seek(0)
 		stream.writeUInt32(self.request.size() - SIZEOF_UINT32)
 		self.socket.write(self.request)
@@ -88,7 +90,7 @@ class ChatOn(QDialog):
 				break
 			action = QString()
 			textFromServer = QString()
-			stream >> action >> textFromServer 
+			stream >> action >> textFromServer
 			if action == "CHAT":
 				self.updateUi(textFromServer)
 			elif action =="AUTH":

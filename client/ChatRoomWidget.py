@@ -3,6 +3,7 @@ from PyQt4.Qt import *
 from ChatClient import ChatOn
 
 from client import asktoDM
+from functools import partial
 
 import thread
 
@@ -44,22 +45,21 @@ class ChatRoomWidget(QMainWindow):
 
 		print idx1
 		for x in xrange(0, idx1):
-			print 'x:', x
 			vbox1.addWidget(self.button[x])
 
 		page.setLayout(vbox1)
 		self.setCentralWidget(page)
 
-		tempstr = '1212121212'
-
 		for x in xrange(0, idx1):
-			self.connect(self.button[x], SIGNAL("clicked()"), self.doit(tempstr))		
+			print 'x:', x, ' / ',words[x].ID
+###			self.connect(self.button[x], SIGNAL("clicked()"), lambda: self.doit(words[x].ID))
+			self.connect(self.button[x], SIGNAL("clicked()"), partial(self.doit, words[x].ID))
 
 #2		self.connect(self.button1, SIGNAL("clicked()"), self.doit)
 #2		self.connect(self.button2, SIGNAL("clicked()"), self.doit)
 
 	def doit(self, tstr):
-		print "opening a new popup window"
+		print "opening a new popup window ", tstr
 		self.chat = ChatOn(self, tstr)
 		self.chat.show()
 
