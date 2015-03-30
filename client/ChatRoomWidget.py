@@ -18,48 +18,47 @@ class ChatRoomWidget(QMainWindow):
 		self.create_main_frame()
 
 	def create_main_frame(self):
-		print 'Queries @ Chat Room: ',self.username
+		#!print 'Queries @ Chat Room: ',self.username
 		words = asktoDM(self.username)
-		print words
+		#!print words
 
 		page = QWidget()
-#		self.button1 = QPushButton('keyword 1', page)
-#2		self.button1 = QPushButton(words.queries[0], page)
-#		self.button2 = QPushButton('keyword 2', page)
-#2		self.button2 = QPushButton(','.join(words.queries), page)
 
-		idx1 = 0
-		self.button = []
-		for wl in words:
-			if idx1 == 2:
-				break
-			self.button.append( QPushButton(','.join(wl.data), page) )
-			idx1 = idx1 + 1
+		if words == []:	# case that there is no groups
+			self.button = QPushButton('Quit', page)
+			self.label = QLabel('No Chat Group', page)
+			self.connect(self.button, SIGNAL("clicked()"),self.close)
 
+			vbox1 = QVBoxLayout()
+			vbox1.addWidget(self.label)
+			vbox1.addWidget(self.button)
 
-		print 'len:', len(self.button)
-		print self.button[0]
-		vbox1 = QVBoxLayout()
-#2		vbox1.addWidget(self.button1)
-#2		vbox1.addWidget(self.button2)
+			page.setLayout(vbox1)
+			self.setCentralWidget(page)
+		else:
+			idx1 = 0
+			self.button = []
+			for wl in words:
+				if idx1 == 2:
+					break
+				self.button.append( QPushButton(','.join(wl.data), page) )
+				idx1 = idx1 + 1
 
-		print idx1
-		for x in xrange(0, idx1):
-			vbox1.addWidget(self.button[x])
+			vbox1 = QVBoxLayout()
 
-		page.setLayout(vbox1)
-		self.setCentralWidget(page)
+			for x in xrange(0, idx1):
+				vbox1.addWidget(self.button[x])
 
-		for x in xrange(0, idx1):
-			print 'x:', x, ' / ',words[x].ID
-###			self.connect(self.button[x], SIGNAL("clicked()"), lambda: self.doit(words[x].ID))
-			self.connect(self.button[x], SIGNAL("clicked()"), partial(self.doit, words[x].ID))
+			page.setLayout(vbox1)
+			self.setCentralWidget(page)
 
-#2		self.connect(self.button1, SIGNAL("clicked()"), self.doit)
-#2		self.connect(self.button2, SIGNAL("clicked()"), self.doit)
+			for x in xrange(0, idx1):
+				#!self.connect(self.button[x], SIGNAL("clicked()"), lambda: self.doit(words[x].ID))
+				self.connect(self.button[x], SIGNAL("clicked()"), partial(self.doit, words[x].ID))
+
 
 	def doit(self, tstr):
-		print "opening a new popup window ", tstr
+		#!print "opening a new popup window ", tstr
 		self.chat = ChatOn(self, tstr)
 		self.chat.show()
 
