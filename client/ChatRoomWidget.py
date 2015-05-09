@@ -20,7 +20,8 @@ class ChatRoomWidget(QMainWindow):
 	def create_main_frame(self):
 		#!print 'Queries @ Chat Room: ',self.username
 		words = asktoDM(self.username)
-		#!print words
+#11		print 'words'
+#11		print words
 
 		page = QWidget()
 
@@ -39,6 +40,7 @@ class ChatRoomWidget(QMainWindow):
 			idx1 = 0
 			self.button = []
 			for wl in words:
+				print wl
 				if idx1 == 2:
 					break
 				self.button.append( QPushButton(','.join(wl.data), page) )
