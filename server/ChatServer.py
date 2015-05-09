@@ -87,7 +87,6 @@ class ServerDlg(QPushButton):
 					#%print 'in set: ',self.chatgroup[s], ' / ', self.groupID
 					
 
-
 	def sendAuth(self,s):
 		reply = QByteArray()
 		stream = QDataStream(reply, QIODevice.WriteOnly)
@@ -123,19 +122,20 @@ class ServerDlg(QPushButton):
 			if self.users[user].socketDescriptor() == socketId:
 				sender = user
 				cgroupID = self.chatgroup[self.users[user]]
-				#%print 'cgroupID: ',cgroupID
 				break
+
 		for user in self.users:
-			#%print 'user::: ', type(self.users[user]), self.users[user].peerAddress().toString(), '/', self.users[user].peerPort()
-			#%print 'self.chatgroup[self.users[user]]: ', self.chatgroup[self.users[user]], ' cgroupID: ', cgroupID
+
+			print ("%s / %s") % (self.chatgroup[self.users[user]], cgroupID)
+			# Skip users who do not belong to the same group with speaker
 			if self.chatgroup[self.users[user]] != cgroupID:
 				continue
+
 			if self.users[user].socketDescriptor() == socketId:
 				message = "<p>"+str(now.strftime("%Y-%m-%d %H:%M:%S")) + "</p>" +  "<font color=red>You</font> > {}".format(text)
 			else:
-				#%print 'remote ip/port: ', self.tcpServer.nextPendingConnection().peerAddress(), '/', self.tcpServer.nextPendingConnection().peerPort() 
-				#%print 'remote ip port', self.connections[0].peerAddress(), self.connections[0].peerPort()
 				message = "<p>"+str(now.strftime("%Y-%m-%d %H:%M:%S")) + "</p>" + "<font color=blue>" + sender + "</font>" +" > {}".format(text)
+
 			reply = QByteArray()
 			stream = QDataStream(reply, QIODevice.WriteOnly)
 			stream.setVersion(QDataStream.Qt_4_2)

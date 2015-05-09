@@ -2,6 +2,7 @@ from Dao import UserDao
 from Dao import GroupDao
 from Dao import UserJoinDao
 from Dao import IPTableDao
+from Dao import TotalDao
 
 from model import User
 
@@ -14,6 +15,8 @@ class DBManager:
 		self.groupDao = GroupDao.GroupDao()
 		self.userJoinDao = UserJoinDao.UserJoinDao()
 		self.iptableDao = IPTableDao.IPTableDao()
+		self.totalDao = TotalDao.TotalDao()
+
 		self._semaphores = Semaphore(10)
 
 # User Operations
@@ -123,7 +126,7 @@ class DBManager:
 
 		return userIDs
 
-	def selectGroupByUserID(self,userID ):
+	def selectGroupByUserID(self, userID):
 		return self.groupDao.selectGroupByUserID(userID)
 
 	def selectWordsByGroupID(self,groupID ):
@@ -148,3 +151,35 @@ class DBManager:
 		r = self.iptableDao.selectIPsByUserID(userID)
 		self._semaphores.release()
 		return r
+
+
+
+
+
+
+
+# Group Operations
+	def insertQueries(self, userId, datapacket):
+		self._semaphores.acquire()
+		wordsID = self.totalDao.insertQueries(userId, datapacket.data)
+		self._semaphores.release()
+
+
+	def getWordsByUserID(self,userID ):
+		return self.totalDao.getWordsByUserID(userID)
+
+
+	def getOthersWordsByUserID(self,userID ):
+		return self.totalDao.getOthersWordsByUserID(userID)
+
+	def insertGroup(self, groupSet):
+		self._semaphores.acquire()
+		wordsSet = self.totalDao.insertGroup(groupSet)
+		self._semaphores.release()
+		return wordsSet
+
+
+
+
+
+

@@ -53,11 +53,13 @@ class DataManager:
 
 				if pm.isquery( rcvdatapacket ) == True:
 					#1self.sgr.runSGR(rcvdatapacket)
-					self.sgr.queryMatching( rcvdatapacket )
+#s					self.sgr.queryMatching( rcvdatapacket )
+					self.sgr.insertQuery( user, rcvdatapacket )
 				else:
 					# Get Queries Of Group By FacebookID
 					#1user = self.d.findUserByFacebookID( objrcv.username[0] )
 					#%print 'user.ID; ',user.ID
+					"""
 					group = self.db.selectGroupByUserID( user.ID )
 
 					dp = []
@@ -68,6 +70,21 @@ class DataManager:
 						dp.append( DataPacket.DataPacket(gg.groupID, 2, words.queries) )
 
 					self.data_socket.sendto( pickle.dumps(dp), address )
+					"""
+
+					dp = []
+
+					wordsSet = self.sgr.getChatGroupByQueries(user)
+
+					for ws in wordsSet:
+						print '=============\nws.group_id ws.queries'
+						print ws.group_id, ws.queries
+						dp.append( DataPacket.DataPacket(ws.group_id, 2, ws.queries) )
+
+
+					# sending data result to client
+					self.data_socket.sendto( pickle.dumps(dp), address )
+
 			except socket.error,msg:
 				Log.error(error)
 				Log.info("Program Exit")
